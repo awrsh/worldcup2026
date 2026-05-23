@@ -1,0 +1,232 @@
+{
+  "meta": {
+    "title": "پیش‌بینی جام جهانی ۲۰۲۶",
+    "description": "نتیجه بازی‌ها را پیش‌بینی کنید، امتیاز بگیرید و در جدول رده‌بندی جام جهانی ۲۰۲۶ بالا بروید."
+  },
+  "common": {
+    "vs": "در برابر",
+    "live": "زنده",
+    "locked": "قفل شده",
+    "tbd": "نامشخص",
+    "pts": "امتیاز",
+    "utc": "UTC",
+    "you": "شما",
+    "all": "همه",
+    "group": "گروه {{id}}",
+    "matchday": "هفته {{day}}",
+    "pointsShort": "+{{points}} امتیاز",
+    "exactScores": "{{count}} نتیجه دقیق",
+    "previousScore": "قبلی: {{home}}-{{away}}",
+    "comingSoon": "به‌زودی",
+    "dash": "—"
+  },
+  "language": {
+    "label": "زبان",
+    "en": "English",
+    "fa": "فارسی"
+  },
+  "theme": {
+    "label": "تم",
+    "light": "روشن",
+    "dark": "تیره",
+    "switchToLight": "تغییر به حالت روشن",
+    "switchToDark": "تغییر به حالت تیره"
+  },
+  "sidebar": {
+    "collapse": "بستن سایدبار",
+    "expand": "باز کردن سایدبار"
+  },
+  "nav": {
+    "brand": "جام جهانی ۲۰۲۶",
+    "home": "خانه",
+    "dashboard": "داشبورد",
+    "groups": "گروه‌ها",
+    "bracket": "جدول حذفی",
+    "leaderboard": "رده‌بندی",
+    "teams": "تیم‌ها",
+    "rules": "قوانین"
+  },
+  "footer": {
+    "tagline": "جام جهانی ۲۰۲۶ · آمریکا · کانادا · مکزیک",
+    "disclaimer": "اپلیکیشن پیش‌بینی هواداران — وابسته به فیفا نیست"
+  },
+  "home": {
+    "heroBadge": "جام جهانی فیفا ۲۰۲۶",
+    "heroTitle1": "هر بازی را پیش‌بینی کن.",
+    "heroTitle2": "جدول رده‌بندی را فتح کن.",
+    "heroDescription": "به هواداران در آمریکا، کانادا و مکزیک بپیوندید. قبل از شروع بازی نتیجه را حدس بزنید، برای برنده درست و نتیجه دقیق امتیاز بگیرید و در رده‌بندی جهانی بالا بروید.",
+    "startPredicting": "شروع پیش‌بینی",
+    "howScoringWorks": "نحوه امتیازدهی",
+    "countdownLabel": "شروع تورنمنت",
+    "countdownTitle": "جام جهانی ۲۰۲۶",
+    "countdownDate": "۱۱ ژوئن ۲۰۲۶ · آمریکای شمالی",
+    "featuredTitle": "بازی‌های پیش‌رو",
+    "featuredSubtitle": "قبل از شروع بازی پیش‌بینی کنید",
+    "viewAll": "مشاهده همه",
+    "viewAllMatches": "مشاهده همه بازی‌ها",
+    "howItWorksTitle": "چطور کار می‌کند",
+    "howItWorksSubtitle": "سه قدم تا قهرمانی در جام جهانی",
+    "step1Title": "نتیجه را انتخاب کن",
+    "step1Description": "نتیجه دقیق هر بازی را قبل از سوت شروع پیش‌بینی کن. با شروع بازی، پیش‌بینی قفل می‌شود.",
+    "step2Title": "امتیاز بگیر",
+    "step2Description": "۳ امتیاز برای برنده درست، ۵ امتیاز برای نتیجه دقیق و ضریب برای برد پیاپی.",
+    "step3Title": "بالا برو",
+    "step3Description": "در سطح جهانی، با دوستان یا بر اساس کشور رقابت کن و رتبه‌ات را در هر مرحله دنبال کن.",
+    "groupStageTitle": "مرحله گروهی",
+    "groupStageSubtitle": "۱۲ گروه · ۴۸ تیم · ۱۰۴ بازی",
+    "exploreGroups": "مشاهده همه گروه‌ها",
+    "leaderboardTitle": "برترین پیش‌بینی‌کنندگان",
+    "leaderboardSubtitle": "ببین چه کسی در صدر است",
+    "fullLeaderboard": "جدول کامل رده‌بندی",
+    "ctaTitle": "آماده‌ای؟",
+    "ctaDescription": "بزرگ‌ترین جام جهانی تاریخ به آمریکای شمالی می‌آید. پیش‌بینی کن و ثابت کن فوتبال را می‌شناسی.",
+    "goToDashboard": "رفتن به داشبورد",
+    "statTeams": "۴۸ تیم",
+    "statMatches": "۱۰۴ بازی",
+    "statHosts": "۳ میزبان",
+    "bannerCaption": "بزرگ‌ترین رویداد فوتبال — آمریکای شمالی ۲۰۲۶"
+  },
+  "countdown": {
+    "days": "روز",
+    "hours": "ساعت",
+    "minutes": "دقیقه",
+    "seconds": "ثانیه"
+  },
+  "dashboard": {
+    "title": "پیش‌بینی بازی‌ها",
+    "subtitle": "قبل از شروع بازی نتیجه را انتخاب کن",
+    "noMatchesTitle": "بازی‌ای یافت نشد",
+    "noMatchesDescription": "فیلترها را تغییر دهید یا به تب دیگری بروید."
+  },
+  "matchTabs": {
+    "live": "زنده",
+    "upcoming": "پیش‌رو",
+    "completed": "تمام‌شده"
+  },
+  "matchFilters": {
+    "searchTeams": "جستجوی تیم...",
+    "group": "گروه",
+    "allGroups": "همه گروه‌ها",
+    "stage": "مرحله",
+    "allStages": "همه مراحل",
+    "team": "تیم",
+    "allTeams": "همه تیم‌ها"
+  },
+  "stages": {
+    "group": "مرحله گروهی",
+    "round_of_32": "یک‌چهارم نهایی (۳۲ تیم)",
+    "round_of_16": "یک‌هشتم نهایی",
+    "quarter_final": "یک‌چهارم نهایی",
+    "semi_final": "نیمه‌نهایی",
+    "third_place": "رتبه سوم",
+    "final": "فینال"
+  },
+  "prediction": {
+    "winnerPickTitle": "پیش‌بینی برنده",
+    "home": "میزبان",
+    "away": "میهمان",
+    "draw": "مساوی",
+    "yourPrediction": "پیش‌بینی شما",
+    "predictedWinner": "برنده پیش‌بینی‌شده",
+    "drawLabel": "مساوی",
+    "save": "ذخیره پیش‌بینی",
+    "lockNotice": "پیش‌بینی‌ها با شروع بازی قفل می‌شوند",
+    "detailLink": "جزئیات پیش‌بینی",
+    "lockedTitle": "پیش‌بینی قفل شد",
+    "lockedDescription": "این بازی شروع شده یا تمام شده. دیگر نمی‌توانید پیش‌بینی ثبت کنید.",
+    "yourPredictionLabel": "پیش‌بینی شما",
+    "saved": "پیش‌بینی ذخیره شد!",
+    "lockedError": "پس از شروع بازی پیش‌بینی قفل می‌شود"
+  },
+  "matchDetail": {
+    "notFoundTitle": "بازی یافت نشد",
+    "notFoundDescription": "این بازی وجود ندارد.",
+    "backToDashboard": "← بازگشت به داشبورد",
+    "backToMatches": "بازگشت به بازی‌ها",
+    "matchStats": "آمار بازی",
+    "headToHead": "سابقه رودررو",
+    "headToHeadDescription": "داده‌های تاریخی پس از اتصال به API Sportmonks اینجا نمایش داده می‌شود.",
+    "stats": {
+      "possession": "مالکیت توپ",
+      "shots": "شوت",
+      "onTarget": "شوت در چارچوب",
+      "corners": "کرنر"
+    }
+  },
+  "groups": {
+    "title": "مرحله گروهی",
+    "subtitle": "دو تیم اول هر گروه به یک‌چهارم نهایی (۳۲ تیم) راه می‌یابند",
+    "noResults": "هنوز نتیجه‌ای ثبت نشده"
+  },
+  "standings": {
+    "team": "تیم",
+    "played": "پ",
+    "won": "ب",
+    "drawn": "م",
+    "lost": "ش",
+    "goalDiff": "تف",
+    "points": "ام"
+  },
+  "bracket": {
+    "title": "جدول حذفی",
+    "subtitle": "مسیر تا فینال در آمریکای شمالی",
+    "unavailable": "جدول حذفی در دسترس نیست"
+  },
+  "leaderboard": {
+    "title": "رده‌بندی",
+    "subtitle": "رتبه‌ها پس از هر هفته بازی به‌روز می‌شوند",
+    "scopeGlobal": "جهانی",
+    "scopeFriends": "دوستان",
+    "scopeCountry": "کشور من",
+    "rank": "رتبه",
+    "player": "بازیکن",
+    "exact": "دقیق",
+    "winners": "برنده",
+    "streak": "پیاپی"
+  },
+  "teams": {
+    "title": "تیم‌ها",
+    "subtitle": "هر ۴۸ تیم حاضر در جام ۲۰۲۶",
+    "searchPlaceholder": "جستجوی تیم...",
+    "fifaRanking": "فیفا #{{rank}}",
+    "fifaRankingFull": "رتبه فیفا #{{rank}}",
+    "squadHighlights": "ستاره‌های تیم"
+  },
+  "rules": {
+    "title": "قوانین و امتیازدهی",
+    "subtitle": "هر آنچه برای رقابت نیاز دارید",
+    "scoringTitle": "سیستم امتیازدهی",
+    "scoringNote": "فقط بالاترین قانون قابل‌اجرا برای هر بازی اعمال می‌شود — نتیجه دقیق فقط ۵ امتیاز می‌دهد (جمع نمی‌شود).",
+    "kickoffLock": "پیش‌بینی با شروع بازی بسته می‌شود — پس از آن تغییر ممکن نیست.",
+    "exactScore": "نتیجه دقیق",
+    "exactScoreDesc": "پیش‌بینی دقیق نتیجه نهایی",
+    "correctWinner": "برنده درست",
+    "correctWinnerDesc": "انتخاب تیم برنده (بدون نتیجه دقیق)",
+    "correctDraw": "مساوی درست",
+    "correctDrawDesc": "پیش‌بینی مساوی وقتی بازی مساوی تمام شود",
+    "correctGoalDiff": "تفاضل گل درست",
+    "correctGoalDiffDesc": "حدس درست اختلاف گل بدون نتیجه یا برنده دقیق",
+    "makingPredictionsTitle": "ثبت پیش‌بینی",
+    "makingPredictions1": "نتیجه پیش‌بینی را قبل از شروع هر بازی ثبت کنید.",
+    "makingPredictions2": "با شروع بازی، پیش‌بینی قفل می‌شود و قابل تغییر نیست.",
+    "makingPredictions3": "تا قبل از شروع بازی می‌توانید پیش‌بینی را به‌روز کنید.",
+    "leaderboardTitle": "رده‌بندی",
+    "leaderboard1": "جهانی — همه بازیکنان بر اساس مجموع امتیاز.",
+    "leaderboard2": "دوستان — مقایسه با دوستان متصل.",
+    "leaderboard3": "کشور — رتبه‌بندی بر اساس کشور شما.",
+    "leaderboard4": "رتبه‌ها پس از ثبت نتایج رسمی به‌روز می‌شوند.",
+    "formatTitle": "فرمت تورنمنت",
+    "format1": "۴۸ تیم در ۱۲ گروه ۴ تایی (گروه‌های A تا L).",
+    "format2": "دو تیم اول هر گروه به‌علاوه ۸ تیم سوم برتر صعود می‌کنند.",
+    "format3": "مراحل حذفی: ۳۲ تیم → ۱۶ تیم → یک‌چهارم → نیمه‌نهایی → فینال.",
+    "format4": "بازی رده‌بندی بین بازنده‌های نیمه‌نهایی."
+  },
+  "header": {
+    "tournamentTitle": "جام جهانی فیفا ۲۰۲۶",
+    "tournamentShort": "جام ۲۰۲۶",
+    "hostNations": "آمریکا · کانادا · مکزیک",
+    "nextMatch": "بازی بعدی",
+    "profileMenu": "منوی پروفایل",
+    "yourPoints": "امتیاز شما"
+  }
+}

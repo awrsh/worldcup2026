@@ -1,0 +1,232 @@
+{
+  "meta": {
+    "title": "World Cup 2026 Predictions",
+    "description": "Predict scores, earn points, and climb the leaderboard for FIFA World Cup 2026."
+  },
+  "common": {
+    "vs": "VS",
+    "live": "LIVE",
+    "locked": "Locked",
+    "tbd": "TBD",
+    "pts": "pts",
+    "utc": "UTC",
+    "you": "You",
+    "all": "All",
+    "group": "Group {{id}}",
+    "matchday": "Matchday {{day}}",
+    "pointsShort": "+{{points}} pts",
+    "exactScores": "{{count}} exact scores",
+    "previousScore": "Previous: {{home}}-{{away}}",
+    "comingSoon": "Coming soon",
+    "dash": "—"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "fa": "فارسی"
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
+  },
+  "sidebar": {
+    "collapse": "Collapse sidebar",
+    "expand": "Expand sidebar"
+  },
+  "nav": {
+    "brand": "WC 2026",
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "groups": "Groups",
+    "bracket": "Bracket",
+    "leaderboard": "Leaderboard",
+    "teams": "Teams",
+    "rules": "Rules"
+  },
+  "footer": {
+    "tagline": "FIFA World Cup 2026 · USA · Canada · Mexico",
+    "disclaimer": "Fan prediction app — not affiliated with FIFA"
+  },
+  "home": {
+    "heroBadge": "FIFA World Cup 2026",
+    "heroTitle1": "Predict Every Match.",
+    "heroTitle2": "Rule the Leaderboard.",
+    "heroDescription": "Join fans across USA, Canada, and Mexico. Pick scores before kickoff, earn points for correct winners and exact scores, and climb the global rankings.",
+    "startPredicting": "Start Predicting",
+    "howScoringWorks": "How Scoring Works",
+    "countdownLabel": "Kickoff In",
+    "countdownTitle": "World Cup 2026 Opens",
+    "countdownDate": "June 11, 2026 · North America",
+    "featuredTitle": "Upcoming Matches",
+    "featuredSubtitle": "Make your picks before kickoff",
+    "viewAll": "View all",
+    "viewAllMatches": "View all matches",
+    "howItWorksTitle": "How It Works",
+    "howItWorksSubtitle": "Three steps to World Cup glory",
+    "step1Title": "Pick Your Scores",
+    "step1Description": "Predict the exact scoreline for every match before kickoff. Once the whistle blows, your pick is locked.",
+    "step2Title": "Earn Points",
+    "step2Description": "Get 3 points for the correct winner, 5 bonus for an exact score, and streak multipliers on hot runs.",
+    "step3Title": "Climb the Board",
+    "step3Description": "Compete globally, with friends, or by country. Track your rank through every stage of the tournament.",
+    "groupStageTitle": "Group Stage",
+    "groupStageSubtitle": "12 groups · 48 nations · 104 matches",
+    "exploreGroups": "Explore all groups",
+    "leaderboardTitle": "Top Predictors",
+    "leaderboardSubtitle": "See who's leading the pack",
+    "fullLeaderboard": "Full leaderboard",
+    "ctaTitle": "Ready to Play?",
+    "ctaDescription": "The biggest World Cup ever is coming to North America. Make your predictions and prove you know the beautiful game.",
+    "goToDashboard": "Go to Dashboard",
+    "statTeams": "48 Teams",
+    "statMatches": "104 Matches",
+    "statHosts": "3 Host Nations",
+    "bannerCaption": "The greatest show on earth — North America 2026"
+  },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hrs",
+    "minutes": "Min",
+    "seconds": "Sec"
+  },
+  "dashboard": {
+    "title": "Match Predictions",
+    "subtitle": "Pick scores before kickoff",
+    "noMatchesTitle": "No matches found",
+    "noMatchesDescription": "Try adjusting your filters or switch to another tab."
+  },
+  "matchTabs": {
+    "live": "Live",
+    "upcoming": "Upcoming",
+    "completed": "Completed"
+  },
+  "matchFilters": {
+    "searchTeams": "Search teams...",
+    "group": "Group",
+    "allGroups": "All Groups",
+    "stage": "Stage",
+    "allStages": "All Stages",
+    "team": "Team",
+    "allTeams": "All Teams"
+  },
+  "stages": {
+    "group": "Group Stage",
+    "round_of_32": "Round of 32",
+    "round_of_16": "Round of 16",
+    "quarter_final": "Quarter Final",
+    "semi_final": "Semi Final",
+    "third_place": "Third Place",
+    "final": "Final"
+  },
+  "prediction": {
+    "winnerPickTitle": "Pick the winner",
+    "home": "Home",
+    "away": "Away",
+    "draw": "Draw",
+    "yourPrediction": "Your Prediction",
+    "predictedWinner": "Predicted winner",
+    "drawLabel": "Draw",
+    "save": "Save Prediction",
+    "lockNotice": "Predictions lock at kickoff",
+    "detailLink": "Prediction details",
+    "lockedTitle": "Predictions Locked",
+    "lockedDescription": "This match has started or finished. Predictions can no longer be submitted.",
+    "yourPredictionLabel": "Your prediction",
+    "saved": "Prediction saved!",
+    "lockedError": "Predictions are locked after kickoff"
+  },
+  "matchDetail": {
+    "notFoundTitle": "Match not found",
+    "notFoundDescription": "This fixture does not exist.",
+    "backToDashboard": "← Back to dashboard",
+    "backToMatches": "Back to matches",
+    "matchStats": "Match Stats",
+    "headToHead": "Head to Head",
+    "headToHeadDescription": "Historical data will appear here when connected to Sportmonks API.",
+    "stats": {
+      "possession": "Possession",
+      "shots": "Shots",
+      "onTarget": "On Target",
+      "corners": "Corners"
+    }
+  },
+  "groups": {
+    "title": "Group Stage",
+    "subtitle": "Top two from each group advance to the Round of 32",
+    "noResults": "No results yet"
+  },
+  "standings": {
+    "team": "Team",
+    "played": "P",
+    "won": "W",
+    "drawn": "D",
+    "lost": "L",
+    "goalDiff": "GD",
+    "points": "Pts"
+  },
+  "bracket": {
+    "title": "Knockout Bracket",
+    "subtitle": "Follow the road to the final across North America",
+    "unavailable": "Bracket unavailable"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "subtitle": "Rankings update after each matchday",
+    "scopeGlobal": "Global",
+    "scopeFriends": "Friends",
+    "scopeCountry": "My Country",
+    "rank": "Rank",
+    "player": "Player",
+    "exact": "Exact",
+    "winners": "Winners",
+    "streak": "Streak"
+  },
+  "teams": {
+    "title": "Teams",
+    "subtitle": "All 48 nations competing in 2026",
+    "searchPlaceholder": "Search teams...",
+    "fifaRanking": "FIFA #{{rank}}",
+    "fifaRankingFull": "FIFA Ranking #{{rank}}",
+    "squadHighlights": "Squad Highlights"
+  },
+  "rules": {
+    "title": "Rules & Scoring",
+    "subtitle": "Everything you need to compete",
+    "scoringTitle": "Scoring System",
+    "scoringNote": "Only the highest applicable rule applies per match — exact score earns 5 points only (no stacking).",
+    "kickoffLock": "Predictions close at kickoff — no changes once the match begins.",
+    "exactScore": "Exact score",
+    "exactScoreDesc": "Predict the precise final scoreline",
+    "correctWinner": "Correct winner",
+    "correctWinnerDesc": "Pick the winning team (not exact score)",
+    "correctDraw": "Correct draw",
+    "correctDrawDesc": "Predict a draw when the match ends level",
+    "correctGoalDiff": "Correct goal difference",
+    "correctGoalDiffDesc": "Right margin without exact score or winner",
+    "makingPredictionsTitle": "Making Predictions",
+    "makingPredictions1": "Submit your predicted scoreline before kickoff for each match.",
+    "makingPredictions2": "Once the match starts, predictions are locked and cannot be changed.",
+    "makingPredictions3": "You can update predictions any time before kickoff.",
+    "leaderboardTitle": "Leaderboard",
+    "leaderboard1": "Global — All players ranked by total points.",
+    "leaderboard2": "Friends — Compare against your connected friends.",
+    "leaderboard3": "Country — Rankings filtered to players from your country.",
+    "leaderboard4": "Rankings update after official match results are recorded.",
+    "formatTitle": "Tournament Format",
+    "format1": "48 teams in 12 groups of 4 (Groups A–L).",
+    "format2": "Top two from each group plus eight best third-place teams advance.",
+    "format3": "Knockout rounds: Round of 32 → Round of 16 → Quarter-finals → Semi-finals → Final.",
+    "format4": "Third-place playoff between semi-final losers."
+  },
+  "header": {
+    "tournamentTitle": "FIFA World Cup 2026",
+    "tournamentShort": "WC 2026",
+    "hostNations": "USA · Canada · Mexico",
+    "nextMatch": "Next match",
+    "profileMenu": "Profile menu",
+    "yourPoints": "Your points"
+  }
+}
