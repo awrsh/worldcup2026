@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Lock, Save } from "lucide-react";
+import { Lock } from "lucide-react";
 import type { Fixture } from "@/lib/api/types";
 import { getTeamById } from "@/data/mock/teams";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { FlagAvatar } from "@/components/shared/FlagAvatar";
 import { MatchWinnerPicker } from "@/components/matches/MatchWinnerPicker";
+import { ScoreSelector, MorphSaveButton } from "@/components/animations";
 import {
   getWinnerPickFromPrediction,
   usePredictionStore,
@@ -17,6 +15,8 @@ import { isPredictionLocked } from "@/lib/utils/match-status";
 import { getPredictedWinner } from "@/lib/utils/scoring";
 import { LockedPredictionBanner } from "./LockedPredictionBanner";
 import { useTranslation } from "@/i18n/I18nProvider";
+import { motion, AnimatePresence } from "framer-motion";
+import { fadeUp, transition } from "@/lib/motion";
 
 interface PredictionFormProps {
   fixture: Fixture;
@@ -44,7 +44,7 @@ export function PredictionForm({ fixture }: PredictionFormProps) {
   const winnerLabel =
     winner === "draw" ? t("prediction.drawLabel") : winner === "home" ? home?.name : away?.name;
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const winnerPick = getWinnerPickFromPrediction({
       fixtureId: fixture.id,
       homeScore,
@@ -66,44 +66,52 @@ export function PredictionForm({ fixture }: PredictionFormProps) {
   }
 
   return (
-    <div className="glass-card-light space-y-6 p-6">
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={fadeUp}
+      transition={transition.premium}
+      className="glass-card-light space-y-6 p-6"
+    >
       <h2 className="text-lg font-semibold text-card-foreground">{t("prediction.yourPrediction")}</h2>
 
       <MatchWinnerPicker fixture={fixture} locked={locked} className="mt-0 border-t-0 pt-0" />
 
-      <div className="flex items-center justify-center gap-6">
-        <div className="flex flex-col items-center gap-2">
-          <FlagAvatar code={home?.flagCode} fallback={home?.shortCode} size="lg" />
-          <Label htmlFor="home-score">{home?.name}</Label>
-          <Input
-            id="home-score"
-            type="number"
-            min={0}
-            max={20}
-            className="w-20 text-center text-2xl font-bold"
-            value={homeScore}
-            onChange={(e) => setHomeScore(Math.max(0, parseInt(e.target.value) || 0))}
-          />
-        </div>
-        <span className="text-3xl font-light text-muted-foreground">-</span>
-        <div className="flex flex-col items-center gap-2">
-          <FlagAvatar code={away?.flagCode} fallback={away?.shortCode} size="lg" />
-          <Label htmlFor="away-score">{away?.name}</Label>
-          <Input
-            id="away-score"
-            type="number"
-            min={0}
-            max={20}
-            className="w-20 text-center text-2xl font-bold"
-            value={awayScore}
-            onChange={(e) => setAwayScore(Math.max(0, parseInt(e.target.value) || 0))}
-          />
-        </div>
-      </div>
+      <motion.div
+        layout
+        className="flex items-center justify-center gap-6"
+      >
+        <ScoreSelector
+          label={home?.name ?? ""}
+          value={homeScore}
+          onChange={setHomeScore}
+        />
+        <motion.span
+          key={`${homeScore}-${awayScore}`}
+          initial={{ scale: 1.2, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="text-3xl font-light text-muted-foreground"
+        >
+          -
+        </motion.span>
+        <ScoreSelector
+          label={away?.name ?? ""}
+          value={awayScore}
+          onChange={setAwayScore}
+        />
+      </motion.div>
 
-      <p className="text-center text-sm text-muted-foreground">
-        {t("prediction.predictedWinner")}: <strong className="text-card-foreground">{winnerLabel}</strong>
-      </p>
+      <AnimatePresence mode="wait">
+        <motion.p
+          key={winnerLabel}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          className="text-center text-sm text-muted-foreground"
+        >
+          {t("prediction.predictedWinner")}: <strong className="text-card-foreground">{winnerLabel}</strong>
+        </motion.p>
+      </AnimatePresence>
 
       {existing && (
         <p className="text-center text-xs text-muted-foreground">
@@ -111,13 +119,15 @@ export function PredictionForm({ fixture }: PredictionFormProps) {
         </p>
       )}
 
-      <Button onClick={handleSave} className="w-full" size="lg">
-        <Save className="h-4 w-4" />
-        {t("prediction.save")}
-      </Button>
+      <MorphSaveButton
+        onSave={handleSave}
+        idleLabel={t("prediction.save")}
+        successLabel={t("prediction.saved")}
+      />
+
       <p className="flex items-center justify-center gap-1 text-xs text-muted-foreground">
         <Lock className="h-3 w-3" /> {t("prediction.lockNotice")}
       </p>
-    </div>
+    </motion.div>
   );
 }

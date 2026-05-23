@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
 import {
   LayoutDashboard,
   Grid3X3,
@@ -15,9 +16,9 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/i18n/I18nProvider";
-import { LanguageSwitcher } from "@/components/shared/LanguageSwitcher";
-import { ThemeSwitcher } from "@/components/shared/ThemeSwitcher";
 import { useSidebarStore } from "@/lib/store/sidebar-store";
+import { spring } from "@/lib/motion";
+import { useReducedMotion } from "@/hooks/use-reduced-motion";
 import {
   Tooltip,
   TooltipContent,
@@ -49,19 +50,33 @@ function SidebarLink({
   collapsed: boolean;
   tooltipSide: "left" | "right";
 }) {
+  const reduced = useReducedMotion();
+
   const link = (
-    <Link
-      href={href}
-      className={cn(
-        "flex items-center rounded-xl text-sm transition-colors",
-        collapsed ? "justify-center p-2.5" : "gap-3 px-3 py-2.5",
-        active
-          ? "bg-sidebar-primary/20 text-sidebar-primary"
-          : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+    <Link href={href} className="relative block">
+      {active && !collapsed && (
+        <motion.span
+          layoutId="sidebar-active"
+          className="absolute inset-0 rounded-xl bg-sidebar-primary/20"
+          transition={spring.soft}
+        />
       )}
-    >
-      <Icon className="h-5 w-5 shrink-0" />
-      {!collapsed && <span className="truncate">{label}</span>}
+      <motion.span
+        whileHover={reduced ? undefined : { x: 2 }}
+        whileTap={reduced ? undefined : { scale: 0.97 }}
+        className={cn(
+          "relative flex items-center rounded-xl text-sm transition-colors",
+          collapsed ? "justify-center p-2.5" : "gap-3 px-3 py-2.5",
+          active
+            ? "text-sidebar-primary"
+            : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+        )}
+      >
+        <motion.span whileHover={reduced ? undefined : { rotate: active ? 0 : 8, scale: 1.1 }} transition={spring.snappy}>
+          <Icon className="h-5 w-5 shrink-0" />
+        </motion.span>
+        {!collapsed && <span className="truncate">{label}</span>}
+      </motion.span>
     </Link>
   );
 
@@ -99,7 +114,13 @@ export function SidebarNav() {
               collapsed && "justify-center"
             )}
           >
-            <span className="shrink-0 text-2xl">⚽</span>
+            <motion.span
+              animate={{ rotate: [0, 15, -15, 0] }}
+              transition={{ duration: 2, repeat: Infinity, repeatDelay: 5 }}
+              className="shrink-0 text-2xl"
+            >
+              ⚽
+            </motion.span>
             {!collapsed && <span className="truncate font-bold">{t("nav.brand")}</span>}
           </Link>
           {!collapsed && (
@@ -148,8 +169,6 @@ export function SidebarNav() {
             />
           ))}
         </nav>
-
-       
       </aside>
     </TooltipProvider>
   );
@@ -158,26 +177,36 @@ export function SidebarNav() {
 export function MobileNav() {
   const pathname = usePathname();
   const { t } = useTranslation();
+  const reduced = useReducedMotion();
   const mobileItems = navItems.slice(0, 5);
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t !pb-0 border-sidebar-border bg-sidebar/95 backdrop-blur-xl lg:hidden pb-safe">
-      <div className="flex items-center justify-around px-2 py-2">
-        {mobileItems.map(({ href, labelKey, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className={cn(
-              "flex flex-col items-center gap-1 rounded-lg px-3 py-1.5 text-xs transition-colors",
-              pathname === href || pathname.startsWith(href + "/")
-                ? "text-primary"
-                : "text-muted-foreground"
-            )}
-          >
-            <Icon className="h-5 w-5" />
-            <span>{t(labelKey)}</span>
-          </Link>
-        ))}
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-sidebar-border bg-sidebar/95 pb-safe backdrop-blur-xl lg:hidden">
+      <div className="relative flex items-center justify-around px-2 py-2">
+        {mobileItems.map(({ href, labelKey, icon: Icon }) => {
+          const active = pathname === href || pathname.startsWith(href + "/");
+          return (
+            <Link key={href} href={href} className="relative flex flex-col items-center gap-1 px-3 py-1.5">
+              {active && !reduced && (
+                <motion.span
+                  layoutId="mobile-nav-indicator"
+                  className="absolute -top-0.5 h-0.5 w-8 rounded-full bg-primary"
+                  transition={spring.snappy}
+                />
+              )}
+              <motion.span
+                whileTap={reduced ? undefined : { scale: 0.85 }}
+                animate={active && !reduced ? { y: [0, -3, 0] } : { y: 0 }}
+                transition={active ? { duration: 0.4 } : spring.snappy}
+              >
+                <Icon className={cn("h-5 w-5", active ? "text-primary" : "text-muted-foreground")} />
+              </motion.span>
+              <span className={cn("text-xs", active ? "text-primary font-medium" : "text-muted-foreground")}>
+                {t(labelKey)}
+              </span>
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );
