@@ -1,0 +1,23 @@
+# Manifest for ENV_VARIABLES_LIST_PATH (gradian-app).
+# Top-level keys = GitLab CI/CD variable NAMES (values come from CI/CD settings).
+#
+# scope (combine per variable; processed by ci-templates env_variables_list_script.yml):
+#   build    → docker build --build-arg (only when Dockerfile declares matching ARG).
+#   envfile  → written to project/.env in the build job (Dockerfile: COPY .env before npm run build).
+#              Use for NEXT_PUBLIC_* and other vars needed at `next build` but NOT listed as ARG.
+#   runtime  → written to deploy .env (docker compose variable substitution + container env).
+#
+# If scope is omitted, ci-templates treat the entry as runtime-only (back-compat).
+#
+# Next.js rules (this app):
+#   - NEXT_PUBLIC_* in client bundles → must be present at image BUILD (build and/or envfile).
+#   - Server-only vars (no NEXT_PUBLIC_ prefix) → runtime is enough; rebuild not required.
+#   - Pairs like REQUIRE_LOGIN + NEXT_PUBLIC_REQUIRE_LOGIN mirror server vs client.
+#
+# Logging:
+#   CI_ECHO_ENV_MANIFEST_VALUES=true  → every job prints NAME=value [scopes] (before_script).
+#   BUILD_LOG_ENV_MANIFEST_VALUES=false → build job skips extra .env dump in script.
+
+# =============================================================================
+# Server secrets & auth (runtime only — never pass as build-arg)
+# =============================================================================
