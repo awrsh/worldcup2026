@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "sonner";
+import { AuthCookieWatcher } from "@/components/auth/AuthCookieWatcher";
+import { GradianLoginProvider } from "@/components/auth/GradianLoginProvider";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { LocaleHtmlAttributes } from "@/i18n/LocaleHtmlAttributes";
 import { ThemeHtmlAttributes } from "@/components/shared/ThemeHtmlAttributes";
@@ -62,10 +64,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-screen antialiased">
         <I18nProvider>
-          <LocaleHtmlAttributes />
-          <ThemeHtmlAttributes />
-          {children}
-          <Toaster position="top-center" richColors />
+          <GradianLoginProvider>
+            <AuthCookieWatcher />
+            <LocaleHtmlAttributes />
+            <ThemeHtmlAttributes />
+            {children}
+            <Toaster position="top-center" richColors />
+          </GradianLoginProvider>
         </I18nProvider>
       </body>
     </html>

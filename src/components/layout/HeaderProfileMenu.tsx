@@ -2,7 +2,7 @@
 
 import * as FlagIcons from "country-flag-icons/react/3x2";
 import { Globe, Moon, Sun } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/shared/UserAvatar";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -43,11 +43,12 @@ export function HeaderProfileMenu() {
           className="rounded-full outline-none ring-offset-background transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           aria-label={t("header.profileMenu")}
         >
-          <Avatar className="h-8 w-8 ring-1 ring-primary/40">
-            <AvatarFallback className="bg-primary text-xs text-primary-foreground">
-              {user.avatarInitials}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar
+            className="h-8 w-8"
+            name={user.username}
+            initials={user.avatarInitials}
+            avatarUrl={user.avatarUrl}
+          />
         </button>
       </DropdownMenuTrigger>
 

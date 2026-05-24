@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, Trophy, Users, Calendar, MapPin } from "lucide-react";
+import { LoginCard } from "@/components/auth/LoginCard";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/i18n/I18nProvider";
 import { AnimatedItem, MagneticButton } from "@/components/animations";
@@ -80,7 +81,11 @@ function ParallaxBanner({ alt, caption }: { alt: string; caption: string }) {
   );
 }
 
-export function Hero() {
+interface HeroProps {
+  isAuthenticated?: boolean;
+}
+
+export function Hero({ isAuthenticated = false }: HeroProps) {
   const { t } = useTranslation();
   const reduced = useReducedMotion();
 
@@ -141,17 +146,21 @@ export function Hero() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55, ...transition.premium }}
-              className="mt-7 flex flex-col gap-3 sm:flex-row"
+              className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
             >
-              <MagneticButton
-                className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20"
-                onClick={() => {
-                  window.location.href = "/dashboard";
-                }}
-              >
-                {t("home.startPredicting")}
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </MagneticButton>
+              {isAuthenticated ? (
+                <MagneticButton
+                  className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20"
+                  onClick={() => {
+                    window.location.href = "/dashboard";
+                  }}
+                >
+                  {t("home.startPredicting")}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </MagneticButton>
+              ) : (
+                <LoginCard className="justify-start" />
+              )}
               <Button
                 asChild
                 variant="outline"

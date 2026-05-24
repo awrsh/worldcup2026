@@ -2,7 +2,7 @@
 
 import { getNextUpcomingFixture } from "@/data/mock/fixtures";
 import { CountdownTimer } from "@/components/shared/CountdownTimer";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/shared/UserAvatar";
 import { useUserStore } from "@/lib/store/user-store";
 import { Badge } from "@/components/ui/badge";
 import { LanguageSwitcher } from "@/components/shared/LanguageSwitcher";
@@ -42,11 +42,12 @@ export function StickyTournamentHeader() {
             <Badge variant="gold" className="h-7 px-2 text-xs">
               {user.totalPoints} {t("common.pts")}
             </Badge>
-            <Avatar className="h-8 w-8 ring-1 ring-primary/40">
-              <AvatarFallback className="bg-primary text-xs text-primary-foreground">
-                {user.avatarInitials}
-              </AvatarFallback>
-            </Avatar>
+            <UserAvatar
+              className="h-8 w-8"
+              name={user.username}
+              initials={user.avatarInitials}
+              avatarUrl={user.avatarUrl}
+            />
           </div>
 
           <div className="lg:hidden">

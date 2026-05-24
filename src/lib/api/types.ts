@@ -78,6 +78,7 @@ export interface User {
   id: string;
   username: string;
   avatarInitials: string;
+  avatarUrl?: string | null;
   countryCode: string;
   totalPoints: number;
 }
