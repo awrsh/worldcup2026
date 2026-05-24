@@ -1,0 +1,15 @@
+.git
+.gitignore
+.gitlab-ci.yml
+.cursor
+node_modules
+.next
+out
+coverage
+npm-debug.log*
+*.md
+!README.md
+
+# Allow CI-generated .env for `next build` (envfile scope); ignore other env files.
+.env*
+!.env
