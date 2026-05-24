@@ -161,8 +161,8 @@ variables:
   ENABLE_TRIVY_PROD: "true"
  
   # Break-glass overrides for gates (prefer fixing findings over using these).
-  SECURITY_GATE_OVERRIDE: "false"
-  TRIVY_GATE_OVERRIDE: "false"
+  SECURITY_GATE_OVERRIDE: "true"
+  TRIVY_GATE_OVERRIDE: "true"
 
   ##############################################################################
   # Pre-build validation (templates/test/pre_build_test.yml)

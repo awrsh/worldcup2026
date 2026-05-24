@@ -11,7 +11,7 @@ type AuthLogPayload = {
 export function logAuthDebug(context: string, payload: AuthLogPayload) {
   const { raw, parsed, error, cookieNames, extra } = payload;
 
-  console.log(`[auth:${context}]`, {
+  console.log("[auth]", context, {
     ...extra,
     hasRaw: Boolean(raw),
     rawLength: raw?.length ?? 0,

@@ -20,15 +20,22 @@ export type TranslationDictionary = typeof en;
 
 export type TranslationParams = Record<string, string | number>;
 
+const UNSAFE_OBJECT_KEYS = new Set(["__proto__", "constructor", "prototype"]);
+
 function getNestedValue(obj: Record<string, unknown>, path: string): string | undefined {
   const keys = path.split(".");
   let current: unknown = obj;
 
   for (const key of keys) {
-    if (current === null || typeof current !== "object" || !(key in current)) {
+    if (
+      UNSAFE_OBJECT_KEYS.has(key) ||
+      current === null ||
+      typeof current !== "object" ||
+      !Object.hasOwn(current, key)
+    ) {
       return undefined;
     }
-    current = (current as Record<string, unknown>)[key];
+    current = Reflect.get(current, key);
   }
 
   return typeof current === "string" ? current : undefined;
