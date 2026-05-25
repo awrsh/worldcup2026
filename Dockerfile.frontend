@@ -1,9 +1,18 @@
+# World Cup 2026 — Next.js frontend
+# Build: docker build -f Dockerfile.frontend -t world-cup-frontend .
+# Context: repository root
+
 # ---------------------------
-# Builder stage
+# Builder
 # ---------------------------
 FROM reg.cinnagen.com:8083/node:20-slim AS builder
 
 WORKDIR /app
+
+ARG NEXT_PUBLIC_APP_BASE_URL
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_APP_BASE_URL=${NEXT_PUBLIC_APP_BASE_URL}
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
 COPY package.json package-lock.json* .npmrc* ./
 
@@ -16,16 +25,20 @@ RUN npm config set registry https://reg.cinnagen.com/repository/npm-group/ && \
 RUN npm ci --legacy-peer-deps --include=optional --no-audit --loglevel verbose \
     && npm cache clean --force
 
-COPY . .
+COPY next.config.ts tsconfig.json postcss.config.mjs ./
+COPY public ./public
+COPY src ./src
 
 # CI may write .env (envfile scope) before docker build for NEXT_PUBLIC_* at build time.
+COPY .env* ./
+RUN if [ -f .env ]; then true; fi
+
 RUN npm run build \
     && npm cache clean --force \
     && rm -rf /tmp/* /var/tmp/* /root/.npm /root/.node-gyp
 
-
 # ---------------------------
-# Setup stage (permissions + Next standalone artifacts)
+# Setup (permissions + standalone)
 # ---------------------------
 FROM reg.cinnagen.com:8083/node:20-slim AS setup
 
@@ -36,15 +49,15 @@ RUN groupadd -g 65532 nonroot && \
 
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
 
 RUN chown -R nonroot:nonroot /app /home/nonroot \
     && chmod -R 755 /app \
     && chmod 700 /home/nonroot \
     && rm -rf /tmp/* /var/tmp/*
 
-
 # ---------------------------
-# Final runner stage – distroless
+# Production — distroless
 # ---------------------------
 FROM reg.cinnagen.com:8083/distroless/nodejs24-debian13 AS production
 
@@ -52,7 +65,6 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV HOSTNAME="0.0.0.0"
-# PORT and runtime secrets via docker-compose / GitLab CI variables
 
 COPY --from=setup --chown=65532:65532 /app ./
 

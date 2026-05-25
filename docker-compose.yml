@@ -1,14 +1,27 @@
 services:
-  app:
-    image: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA:-latest}
-    container_name: world-cup-2026
+  frontend:
+    image: ${FRONTEND_IMAGE:-world-cup-frontend:latest}
+    container_name: world-cup-2026-frontend
     restart: unless-stopped
     ports:
-      - "${HOST_PORT:-3000}:3000"
-    env_file:
-      - path: .env
-        required: false
+      - "${FRONTEND_HOST_PORT:-3000}:3000"
     environment:
       NODE_ENV: production
       HOSTNAME: "0.0.0.0"
       PORT: "3000"
+    depends_on:
+      - api
+
+  api:
+    image: ${API_IMAGE:-world-cup-api:latest}
+    container_name: world-cup-2026-api
+    restart: unless-stopped
+    ports:
+      - "${API_HOST_PORT:-8585}:8585"
+    env_file:
+      - path: backend/.env
+        required: false
+    environment:
+      NODE_ENV: production
+      PORT: "8585"
+      FRONTEND_URL: ${FRONTEND_URL}

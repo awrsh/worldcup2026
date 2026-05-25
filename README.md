@@ -30,22 +30,26 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:8080](http://localhost:8080).
+URLها فقط از env خوانده می‌شوند (در کد پیش‌فرضی نیست). کپی `.env.local.example` → `.env.local` و مقادیر را پر کنید.
+
+| Env | نقش |
+|-----|-----|
+| `NEXT_PUBLIC_APP_BASE_URL` | آدرس عمومی اپ (مرورگر) |
+| `NEXT_PUBLIC_API_URL` | آدرس API پیش‌بینی‌ها |
+| `FRONTEND_URL` | همان origin برای CORS در `backend` |
 
 ### Backend API (predictions)
 
 ```bash
 cd backend
 npm install
-cp .env.example .env   # add your Neon DATABASE_URL + DATABASE_URL_UNPOOLED
+cp .env.example .env   # Neon DATABASE_URL + DATABASE_URL_UNPOOLED
 npx prisma db push
 npx prisma db seed
 npm run start:dev
 ```
 
-API: [http://localhost:8585](http://localhost:8585) · Swagger: [http://localhost:8585/api/docs](http://localhost:8585/api/docs)
-
-Copy `.env.local.example` to `.env.local` in the project root (`NEXT_PUBLIC_API_URL=http://localhost:8585`).
+Copy `.env.local.example` → `.env.local` for URL overrides.
 
 ## Build & production
 
@@ -53,6 +57,18 @@ Copy `.env.local.example` to `.env.local` in the project root (`NEXT_PUBLIC_API_
 npm run build
 npm run start
 ```
+
+### Docker (دو ایمیج)
+
+- **Frontend:** `Dockerfile.frontend` → پورت `3000`
+- **API:** `backend/Dockerfile` → پورت `8585`
+
+```bash
+sh ci/docker-build.sh
+FRONTEND_IMAGE=world-cup-frontend:latest API_IMAGE=world-cup-api:latest docker compose up -d
+```
+
+جزئیات CI و متغیرهای deploy: [`ci/DOCKER.md`](ci/DOCKER.md).
 
 ## Lint
 

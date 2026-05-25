@@ -2,14 +2,21 @@
 .gitignore
 .gitlab-ci.yml
 .cursor
-node_modules
-.next
-out
+**/node_modules
+**/.next
+**/out
+**/dist
 coverage
 npm-debug.log*
 *.md
 !README.md
 
-# Allow CI-generated .env for `next build` (envfile scope); ignore other env files.
+# Frontend build context — exclude backend artifacts
+backend/node_modules
+backend/dist
+backend/prisma/dev.db
+backend/prisma/*.db
+
+# Allow CI-generated .env for `next build` (envfile scope)
 .env*
 !.env

@@ -255,9 +255,10 @@ variables:
   # - DEPLOY_DEVELOPMENT_BRANCH -> DOCKERFILE_PATH_DEVELOPMENT
   # - DEPLOY_PROD_BRANCH    -> DOCKERFILE_PATH_PROD
   # Path is relative to repository root.
-  DOCKERFILE_PATH_STAGING: "Dockerfile"
-  DOCKERFILE_PATH_DEVELOPMENT: "Dockerfile"
-  DOCKERFILE_PATH_PROD: "Dockerfile"
+  DOCKERFILE_PATH_STAGING: "Dockerfile.frontend"
+  DOCKERFILE_PATH_DEVELOPMENT: "Dockerfile.frontend"
+  DOCKERFILE_PATH_PROD: "Dockerfile.frontend"
+  # API image: build separately (see ci/DOCKER.md). Tag e.g. $CI_REGISTRY_IMAGE-api:$CI_COMMIT_SHORT_SHA
   #
   # CI_ECHO_ENV_MANIFEST_VALUES: when "true", templates/config/defaults.yml runs (in every job's
   # before_script) the same manifest echo as the build job: for each top-level key in

@@ -1,6 +1,5 @@
+import { API_BASE_URL } from "@/lib/constants/urls";
 import { getClientUserId } from "./client-user";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8585";
 
 export class ApiError extends Error {
   constructor(
@@ -23,7 +22,7 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
   headers.set("Content-Type", "application/json");
   headers.set("x-client-user-id", getClientUserId());
 
-  const res = await fetch(`${API_BASE}${path}`, {
+  const res = await fetch(`${API_BASE_URL}${path}`, {
     ...init,
     headers,
   });
