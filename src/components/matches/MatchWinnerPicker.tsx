@@ -30,11 +30,11 @@ export function MatchWinnerPicker({ fixture, locked, className }: MatchWinnerPic
     { pick: "away", labelKey: "prediction.away" },
   ];
 
-  const handlePick = (pick: WinnerPick, e: React.MouseEvent) => {
+  const handlePick = async (pick: WinnerPick, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (locked) return;
-    saveWinnerPick(fixture.id, pick);
+    await saveWinnerPick(fixture.id, pick);
   };
 
   return (

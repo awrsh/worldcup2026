@@ -30,7 +30,22 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:8080](http://localhost:8080).
+
+### Backend API (predictions)
+
+```bash
+cd backend
+npm install
+cp .env.example .env   # add your Neon DATABASE_URL + DATABASE_URL_UNPOOLED
+npx prisma db push
+npx prisma db seed
+npm run start:dev
+```
+
+API: [http://localhost:8585](http://localhost:8585) · Swagger: [http://localhost:8585/api/docs](http://localhost:8585/api/docs)
+
+Copy `.env.local.example` to `.env.local` in the project root (`NEXT_PUBLIC_API_URL=http://localhost:8585`).
 
 ## Build & production
 

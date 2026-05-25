@@ -3,15 +3,10 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
-import { LoginCard } from "@/components/auth/LoginCard";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/i18n/I18nProvider";
 
-interface FinalCTAProps {
-  isAuthenticated?: boolean;
-}
-
-export function FinalCTA({ isAuthenticated = false }: FinalCTAProps) {
+export function FinalCTA() {
   const { t } = useTranslation();
 
   return (
@@ -29,15 +24,9 @@ export function FinalCTA({ isAuthenticated = false }: FinalCTAProps) {
             <Sparkles className="mx-auto mb-4 h-8 w-8 text-accent" />
             <h2 className="text-2xl font-bold text-foreground sm:text-4xl">{t("home.ctaTitle")}</h2>
             <p className="mx-auto mt-4 max-w-md text-muted-foreground">{t("home.ctaDescription")}</p>
-            <div className="mt-8 flex justify-center">
-              {isAuthenticated ? (
-                <Button asChild size="lg">
-                  <Link href="/dashboard">{t("home.goToDashboard")}</Link>
-                </Button>
-              ) : (
-                <LoginCard />
-              )}
-            </div>
+            <Button asChild size="lg" className="mt-8">
+              <Link href="/dashboard">{t("home.goToDashboard")}</Link>
+            </Button>
           </div>
         </div>
       </motion.div>

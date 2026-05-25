@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, Trophy, Users, Calendar, MapPin } from "lucide-react";
-import { LoginCard } from "@/components/auth/LoginCard";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/i18n/I18nProvider";
 import { AnimatedItem, MagneticButton } from "@/components/animations";
@@ -81,11 +80,7 @@ function ParallaxBanner({ alt, caption }: { alt: string; caption: string }) {
   );
 }
 
-interface HeroProps {
-  isAuthenticated?: boolean;
-}
-
-export function Hero({ isAuthenticated = false }: HeroProps) {
+export function Hero() {
   const { t } = useTranslation();
   const reduced = useReducedMotion();
 
@@ -97,8 +92,6 @@ export function Hero({ isAuthenticated = false }: HeroProps) {
 
   return (
     <section className="relative min-h-[88vh] overflow-hidden bg-background">
-       
-
       <div className="relative mx-auto flex min-h-[88vh] max-w-7xl flex-col justify-center px-4 pb-16 pt-28 sm:px-6 lg:px-8">
         <motion.div
           className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14"
@@ -146,21 +139,17 @@ export function Hero({ isAuthenticated = false }: HeroProps) {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55, ...transition.premium }}
-              className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
+              className="mt-7 flex flex-col gap-3 sm:flex-row"
             >
-              {isAuthenticated ? (
-                <MagneticButton
-                  className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20"
-                  onClick={() => {
-                    window.location.href = "/dashboard";
-                  }}
-                >
-                  {t("home.startPredicting")}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </MagneticButton>
-              ) : (
-                <LoginCard className="justify-start" />
-              )}
+              <MagneticButton
+                className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20"
+                onClick={() => {
+                  window.location.href = "/dashboard";
+                }}
+              >
+                {t("home.startPredicting")}
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </MagneticButton>
               <Button
                 asChild
                 variant="outline"

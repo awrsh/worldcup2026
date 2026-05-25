@@ -228,13 +228,5 @@
     "nextMatch": "Next match",
     "profileMenu": "Profile menu",
     "yourPoints": "Your points"
-  },
-  "auth": {
-    "signIn": "Sign in",
-    "signInToAccount": "Sign in to your account",
-    "promptTitle": "Sign in to predict",
-    "promptDescription": "Use your CinnaGen account to save predictions, earn points, and climb the leaderboard.",
-    "secureSignIn": "Secure sign-in via CinnaGen SSO",
-    "backHome": "Back to home"
   }
 }
