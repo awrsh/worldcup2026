@@ -1,0 +1,322 @@
+# CI for the ci-templates repository itself.
+#
+# Uses local: includes so jobs always use the templates from THIS commit (not an older
+# ref on main). Application repos should copy example.gitlab-ci.yml and use
+# include: project: ... ref: v1 (or main) instead.
+################################################################################
+
+################################################################################
+# 1) Include templates from shared ci-templates project (cross-project usage)
+################################################################################
+
+include:
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/config/stages.yml
+  # Stages: security, security_approval, pre_build_test, test_approval, build, image_scan, image_approval, post_build_test, deploy, post_deploy_test, manual_deploy, report.
+  # default before_script logs template variables (CI_ECHO_TEMPLATE_VARIABLES=false to skip).
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/config/defaults.yml
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/config/docker-login.yml
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/config/variables.yml
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/deploy/manual_registry_deploy.yml
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/security/node_security_audit.yml
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/security/owasp_dependency_check.yml
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/security/semgrep_sast.yml
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/gates/security_approval.yml
+  # Optional pre-build validation (pre_build_test / ENABLE_PRE_BUILD_TEST_*); see variables block below.
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/test/pre_build_test.yml
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/build/build.yml
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/build/trivy_image_scan.yml
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/gates/image_approval.yml
+  # Optional post-build validation (post_build_test / ENABLE_POST_BUILD_TEST_*); see variables block below.
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/test/post_build_test.yml
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/deploy/deploy.yml
+  # Optional post-deploy validation (post_deploy_test / ENABLE_POST_DEPLOY_TEST_*); see variables block below.
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/test/post_deploy_test.yml
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/report/pipeline_execution_report.yml
+  - project: "devops/ci-templates"
+    ref: v8
+    file: templates/report/pipeline_execution_report.py.yml
+
+
+
+
+################################################################################
+# 2) Project-specific variables
+#
+# These variables customize the behavior of the shared templates for THIS
+# particular project. You can define them here or in GitLab UI under:
+#   Settings -> CI/CD -> Variables
+################################################################################
+
+variables:
+  ##############################################################################
+  # Docker daemon / build configuration
+  #
+  # These settings are common when using Docker-in-Docker or shell runners
+  # with a local Docker daemon.
+  ##############################################################################
+  DOCKER_DRIVER: "overlay2"          # Filesystem driver for Docker
+  DOCKER_TLS_CERTDIR: ""             # Disable TLS cert dir when not using TLS
+  DOCKER_BUILDKIT: "0"               # Enable faster/more efficient Docker builds
+
+  ##############################################################################
+  # Branch configuration
+  #
+  # The templates use these variables in `rules:` to decide when to run jobs.
+  # - build, security_gate, bashfile_test, Trivy, and gates run only on DEPLOY_STAGING_BRANCH and
+  #   DEPLOY_PROD_BRANCH (unless disabled by ENABLE_* or manual-only deploy flags).
+  # - Trivy / OWASP / Semgrep use ENABLE_*_STAGE / ENABLE_*_PROD on those branches.
+  # - Trivy / OWASP / Semgrep use ENABLE_*_STAGE / ENABLE_*_DEVELOPMENT / ENABLE_*_PROD on those branches.
+  # - Bash file test uses ENABLE_CUSTOM_BASH_TEST_STAGE / ENABLE_CUSTOM_BASH_TEST_DEVELOPMENT / ENABLE_CUSTOM_BASH_TEST_PROD (not "false") per branch.
+  # - Deploy target (runner/env/url): DEPLOY_PROD_BRANCH -> prod; DEPLOY_STAGING_BRANCH -> staging; DEPLOY_DEVELOPMENT_BRANCH -> development.
+  ##############################################################################
+  DEPLOY_PROD_BRANCH: "main"
+  DEPLOY_STAGING_BRANCH: "stage"
+  # Optional: keep empty to disable development flow (backward-compatible default).
+  DEPLOY_DEVELOPMENT_BRANCH: "dev_test"
+  
+  ##############################################################################
+  # GitLab Runner tags
+  #
+  # These must match the tags configured on your GitLab runners.
+  # - RUNNER_TAG_SECURITY: for security / SAST jobs
+  # - RUNNER_TAG_BUILD: for Docker build jobs
+  # - RUNNER_TAG_CUSTOM_TEST: for bashfile_test and test_approval gate jobs
+  # - RUNNER_TAG_DEPLOY_PROD / RUNNER_TAG_DEPLOY_STAGING / RUNNER_TAG_DEPLOY_DEVELOPMENT:
+  #   branch-based deploy targets (production vs staging vs development)
+  ##############################################################################
+  RUNNER_TAG_SECURITY: "CG-GR-APP-DEV-shell"
+  RUNNER_TAG_BUILD: "CG-GR-APP-DEV-shell"
+  RUNNER_TAG_CUSTOM_TEST: "CG-GR-APP-DEV-shell"
+  RUNNER_TAG_DEPLOY_PROD: "CG-GR-Publish"
+  RUNNER_TAG_DEPLOY_STAGING: "cg-gr-wk-stg-01"
+  RUNNER_TAG_DEPLOY_DEVELOPMENT: "cg-gr-wk-stg-01"
+
+  ##############################################################################
+  # Security / scanning tools configuration
+  ##############################################################################
+  NEXUS_REGISTRY: "reg.cinnagen.com:8083"
+  # Private Nexus/Artifactory registry where dependencies or images are stored.
+
+  OWASP_DATA_DIR: "/mnt/data/dependency-check"
+  # Local directory mounted on the runner to cache OWASP Dependency-Check data.
+
+  OWASP_PROJECT_NAME: "$CI_PROJECT_NAME"
+  # Logical project name reported in OWASP reports (defaults to GitLab project).
+
+  TRIVY_CACHE_DIR: "/mnt/data/program/trivy_data"
+  # Cache directory for Trivy vulnerability DB (should be a persistent volume).
+  #
+  # Environment-specific toggles (independent control per environment):
+  # - *_STAGE applies when branch == DEPLOY_STAGING_BRANCH
+  # - *_DEVELOPMENT applies when branch == DEPLOY_DEVELOPMENT_BRANCH
+  # - *_PROD  applies when branch == DEPLOY_PROD_BRANCH
+  # Example: keep Stage scans on, disable only Production Semgrep:
+  #   ENABLE_SEMGREP_STAGE: "true"
+  #   ENABLE_SEMGREP_PROD: "false"
+  ENABLE_SECURITY_AUDIT_STAGE: "true"
+  ENABLE_SECURITY_AUDIT_DEVELOPMENT: "false"
+  ENABLE_SECURITY_AUDIT_PROD: "true"
+  ENABLE_OWASP_STAGE: "true"
+  ENABLE_OWASP_DEVELOPMENT: "false"
+  ENABLE_OWASP_PROD: "true"
+  ENABLE_SEMGREP_STAGE: "true"
+  ENABLE_SEMGREP_DEVELOPMENT: "false"
+  ENABLE_SEMGREP_PROD: "true"
+  ENABLE_TRIVY_STAGE: "true"
+  ENABLE_TRIVY_DEVELOPMENT: "false"
+  ENABLE_TRIVY_PROD: "true"
+ 
+  # Break-glass overrides for gates (prefer fixing findings over using these).
+  SECURITY_GATE_OVERRIDE: "true"
+  TRIVY_GATE_OVERRIDE: "true"
+
+  ##############################################################################
+  # Pre-build validation (templates/test/pre_build_test.yml)
+  #
+  # Runs in the `pre_build_test` stage BEFORE build, on DEPLOY_* branches when the branch-specific flag is enabled
+  # (ENABLE_PRE_BUILD_TEST_STAGE on DEPLOY_STAGING_BRANCH, ENABLE_PRE_BUILD_TEST_DEVELOPMENT on DEPLOY_DEVELOPMENT_BRANCH, ENABLE_PRE_BUILD_TEST_PROD on DEPLOY_PROD_BRANCH).
+  # PRE_BUILD_TEST_SCRIPT_PATH_STAGE / PRE_BUILD_TEST_SCRIPT_PATH_DEVELOPMENT / PRE_BUILD_TEST_SCRIPT_PATH_PROD are relative to repo root (validated under CI_PROJECT_DIR).
+  # Optional: PRE_BUILD_TEST_SCRIPT_PATH when the branch-specific paths are empty (legacy / shared script).
+  # When ENABLE_PRE_BUILD_TEST_* is "false" for the matching branch, the test job is not created at all.
+  # No approval gate is used for this optional test.
+  ##############################################################################
+  ENABLE_PRE_BUILD_TEST_STAGE: "false"
+  ENABLE_PRE_BUILD_TEST_DEVELOPMENT: "false"
+  ENABLE_PRE_BUILD_TEST_PROD: "false"
+  PRE_BUILD_TEST_SCRIPT_PATH_STAGE: "ci/pre-build-test.sh"
+  PRE_BUILD_TEST_SCRIPT_PATH_DEVELOPMENT: "ci/pre-build-test.sh"
+  PRE_BUILD_TEST_SCRIPT_PATH_PROD: "ci/pre-build-test.sh"
+  RUNNER_TAG_PRE_BUILD_TEST: "CG-GR-APP-DEV-shell"
+  ##############################################################################
+  # Post-build validation (templates/test/post_build_test.yml)
+  # 
+  # Runs AFTER build (and after image_scan / image_approval) and BEFORE deploy,
+  # only on the matching deploy branch when the corresponding ENABLE_POST_BUILD_TEST_*
+  # is not "false". The script can verify build integrity (image size, smoke run,
+  # presence of expected artifacts, …) using POST_BUILD_TEST_IMAGE / *_LATEST exported
+  # by the job.
+  ##############################################################################
+  ENABLE_POST_BUILD_TEST_STAGE: "false"
+  ENABLE_POST_BUILD_TEST_DEVELOPMENT: "false"
+  ENABLE_POST_BUILD_TEST_PROD: "false"
+  POST_BUILD_TEST_SCRIPT_PATH_STAGE: "ci/post-build-test.sh"
+  POST_BUILD_TEST_SCRIPT_PATH_DEVELOPMENT: "ci/post-build-test.sh"
+  POST_BUILD_TEST_SCRIPT_PATH_PROD: "ci/post-build-test.sh"
+  RUNNER_TAG_POST_BUILD_TEST: "CG-GR-APP-DEV-shell"
+
+  ##############################################################################
+  # Post-deploy validation (templates/test/post_deploy_test.yml)
+  #
+  # Runs AFTER the matching deploy_* job on the matching deploy branch when the
+  # corresponding ENABLE_POST_DEPLOY_TEST_* is not "false". Designed for smoke /
+  # health checks against the deployed environment; defaults to the same runner
+  # tag as the matching deploy_* job so it can reach the deployed service.
+  ##############################################################################
+  ENABLE_POST_DEPLOY_TEST_STAGE: "false"
+  ENABLE_POST_DEPLOY_TEST_DEVELOPMENT: "false"
+  ENABLE_POST_DEPLOY_TEST_PROD: "false"
+  POST_DEPLOY_TEST_SCRIPT_PATH_STAGE: "ci/post-deploy-test.sh"
+  POST_DEPLOY_TEST_SCRIPT_PATH_DEVELOPMENT: "ci/post-deploy-test.sh"
+  POST_DEPLOY_TEST_SCRIPT_PATH_PROD: "ci/post-deploy-test.sh"
+  RUNNER_TAG_POST_DEPLOY_TEST_STAGE: "CG-GR-API-PRD"
+  RUNNER_TAG_POST_DEPLOY_TEST_DEVELOPMENT: "CG-GR-API-PRD"
+  RUNNER_TAG_POST_DEPLOY_TEST_PROD: "CG-GR-APP-DEV-shell"
+
+  ##############################################################################
+  # Deploy target configuration
+  #
+  # These are used by deploy jobs to label the environment and expose URL
+  # in GitLab UI. For automatic deploy, values are selected by branch:
+  # - main -> DEPLOY_ENV_*_PROD
+  # - dev  -> DEPLOY_ENV_*_STAGING
+  # - DEPLOY_DEVELOPMENT_BRANCH -> DEPLOY_ENV_*_DEVELOPMENT
+  ##############################################################################
+  DEPLOY_ENV_NAME_PROD: "production"
+  DEPLOY_ENV_URL_PROD: "https://scm.cinnagen.com/"
+  DEPLOY_ENV_NAME_STAGING: "staging"
+  DEPLOY_ENV_URL_STAGING: "https://scm.app.cinnagen.com/"
+  DEPLOY_ENV_NAME_DEVELOPMENT: "development"
+  DEPLOY_ENV_URL_DEVELOPMENT: "https://scm_dev.cinnagen.com/"
+  # Optional fallback/default values (used by manual deploy flow if needed):
+  # DEPLOY_ENV_NAME: "staging"
+  # DEPLOY_ENV_URL: "https://fs.cinnagen.com/"
+
+  ##############################################################################
+  # Build / deploy input files
+  #
+  # Commit a YAML manifest in the app repo (path must end in .yml or .yaml; see ci/env-variables.yml).
+  # `yq` on the runner or one-time download (YQ_VERSION).
+  ##############################################################################
+  ENV_VARIABLES_LIST_PATH: "ci/env-variables.yml"
+  # Keys = GitLab CI variable names; scope can combine build / envfile / runtime per variable:
+  #   build   -> docker --build-arg in the build job
+  #   envfile -> .env in the project (docker build context) in the build job (Dockerfile COPY .env)
+  #   runtime -> .env in the deploy job (docker compose)
+  # deploy job sets ENV_VARIABLES_DEPLOY_TARGET (stage|development|prod) for compose file selection; override if you fork deploy.
+  # When "false", build job does not print NAME=value or .env to the log (safer for secrets).
+  # If you do NOT want .env values to appear in pipeline logs, keep this variable "false".
+  BUILD_LOG_ENV_MANIFEST_VALUES: "true"
+  # Build template picks Dockerfile by branch:
+  # - DEPLOY_STAGING_BRANCH -> DOCKERFILE_PATH_STAGING
+  # - DEPLOY_DEVELOPMENT_BRANCH -> DOCKERFILE_PATH_DEVELOPMENT
+  # - DEPLOY_PROD_BRANCH    -> DOCKERFILE_PATH_PROD
+  # Path is relative to repository root.
+  DOCKERFILE_PATH_STAGING: "Dockerfile"
+  DOCKERFILE_PATH_DEVELOPMENT: "Dockerfile"
+  DOCKERFILE_PATH_PROD: "Dockerfile"
+  #
+  # CI_ECHO_ENV_MANIFEST_VALUES: when "true", templates/config/defaults.yml runs (in every job's
+  # before_script) the same manifest echo as the build job: for each top-level key in
+  # ENV_VARIABLES_LIST_PATH, prints NAME=value from the job environment (printenv). Use this to
+  # debug resolved CI/CD values in security_gate, deploy, etc. Requires YAML manifest + yq (may
+  # auto-download on Linux). Turn back to "false" after debugging — secrets can appear in many logs.
+  # CI_ECHO_TEMPLATE_VARIABLES: when "true", templates/config/defaults.yml prints effective values
+  # for template config keys at the start of every job. Set "false" to avoid printing these values.
+  # To hide CI/CD variable values in logs, set BOTH to "false":
+  #   CI_ECHO_TEMPLATE_VARIABLES: "false"
+  #   CI_ECHO_ENV_MANIFEST_VALUES: "false"
+  # To also hide .env output in build logs, set:
+  #   BUILD_LOG_ENV_MANIFEST_VALUES: "false"
+  CI_ECHO_TEMPLATE_VARIABLES: "true"
+  CI_ECHO_ENV_MANIFEST_VALUES: "true"
+
+  COMPOSE_FILE_STAGING: "docker-compose.yml"
+  COMPOSE_FILE_DEVELOPMENT: "docker-compose.yml"
+  COMPOSE_FILE_PROD: "docker-compose.yml"
+  # Override paths if staging, development, and production use different Compose files.
+
+  ##############################################################################
+  # Manual deploy flow
+  #
+  # The `manual_registry_deploy` job is controlled primarily by these vars:
+  # - manual_deploy: when "true", manual-only pipeline (no build / auto deploy).
+  # - ENABLE_MANUAL_REGISTRY_DEPLOY: when "true", same as manual_deploy (registry emergency path).
+  # - manual_deploy_image_tag: which image tag to pull and deploy.
+  #
+  # Defaults for these are provided in templates/config/variables.yml:
+  #   manual_deploy: "false"
+  #   ENABLE_MANUAL_REGISTRY_DEPLOY: "false"
+  #   manual_deploy_image_tag: "latest"
+  #
+  # manual_deploy_env_target: "stage" | "development" | "prod" — which compose file manual deploy uses (with ENV_VARIABLES_DEPLOY_TARGET)
+  # (default in variables.yml: stage).
+  #
+  # Common usage patterns:
+  # 1) Normal pipeline (manual_deploy and ENABLE_MANUAL_REGISTRY_DEPLOY remain "false"):
+  #      - security_gate, optional pre_build_test, then build on DEPLOY_* branches.
+  #      - Security scans follow ENABLE_* and *_STAGE / *_DEVELOPMENT / *_PROD per branch.
+  #      - Deploy runs on those branches (prod branch -> prod, staging branch -> staging, development branch -> development when DEPLOY_DEVELOPMENT_BRANCH is set).
+  #
+  # 2) Trigger a manual-only deploy pipeline:
+  #      - Set CI/CD variable manual_deploy="true" (in UI or below, uncomment)
+  #      - Optionally set manual_deploy_image_tag to a specific release tag.
+  #
+  # 3) Same as (2) using ENABLE_MANUAL_REGISTRY_DEPLOY (alternative to manual_deploy):
+  #      - ENABLE_MANUAL_REGISTRY_DEPLOY="true" + optional manual_deploy_image_tag.
+  #
+  # Example overrides (UNCOMMENT to enable in this file):
+  ##############################################################################
+  # manual_deploy: "true"
+  # manual_deploy_image_tag: "my-release-tag"
+  #
+  # When manual_deploy == "true" OR ENABLE_MANUAL_REGISTRY_DEPLOY == "true":
+  # - Only manual_registry_deploy is created (Play in UI).
+  # - It pulls and deploys the requested image tag to the target environment.
+  #
+  ENABLE_MANUAL_REGISTRY_DEPLOY: "false"
+  manual_deploy_image_tag: "latest"
+
