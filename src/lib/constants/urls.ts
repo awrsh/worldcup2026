@@ -1,3 +1,9 @@
+/// <reference types="node" />
+
+function trimTrailingSlash(url: string): string {
+  return url.replace(/\/$/, "");
+}
+
 function requireEnv(name: string): string {
   const value = process.env[name]?.trim();
   if (!value) {
@@ -5,11 +11,15 @@ function requireEnv(name: string): string {
       `Missing required environment variable: ${name}. Set it in .env.local (dev) or CI/CD (build/deploy).`
     );
   }
-  return value.replace(/\/$/, "");
+  return trimTrailingSlash(value);
 }
 
-/** Public app URL (browser). Set via NEXT_PUBLIC_APP_BASE_URL. */
-export const APP_BASE_URL = requireEnv("NEXT_PUBLIC_APP_BASE_URL");
+/** Public app URL (browser). Resolved at call time — safe during `next build` prerender. */
+export function getAppBaseUrl(): string {
+  return requireEnv("NEXT_PUBLIC_APP_BASE_URL");
+}
 
-/** NestJS API origin (predictions, etc.). Set via NEXT_PUBLIC_API_URL. */
-export const API_BASE_URL = requireEnv("NEXT_PUBLIC_API_URL");
+/** NestJS API origin. Resolved at call time — safe during `next build` prerender. */
+export function getApiBaseUrl(): string {
+  return requireEnv("NEXT_PUBLIC_API_URL");
+}

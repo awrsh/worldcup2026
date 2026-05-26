@@ -21,7 +21,5 @@ docker build -f Dockerfile.frontend \
   -t world-cup-frontend:latest \
   .
 
-echo "Building API"
-docker build -f backend/Dockerfile -t world-cup-api:latest backend/
-
-echo "Done: world-cup-frontend:latest, world-cup-api:latest"
+echo "Done: world-cup-frontend:latest"
+echo "API image: build from World-Cup-Bk repository"

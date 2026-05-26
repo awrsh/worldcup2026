@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@/lib/constants/urls";
+import { getApiBaseUrl } from "@/lib/constants/urls";
 import { getClientUserId } from "./client-user";
 
 export class ApiError extends Error {
@@ -22,7 +22,7 @@ export async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> 
   headers.set("Content-Type", "application/json");
   headers.set("x-client-user-id", getClientUserId());
 
-  const res = await fetch(`${API_BASE_URL}${path}`, {
+  const res = await fetch(`${getApiBaseUrl()}${path}`, {
     ...init,
     headers,
   });

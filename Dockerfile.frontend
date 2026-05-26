@@ -33,6 +33,10 @@ COPY src ./src
 COPY .env* ./
 RUN if [ -f .env ]; then true; fi
 
+# Fail fast with a clear message (manifest build scope / --build-arg must set these).
+RUN test -n "$NEXT_PUBLIC_APP_BASE_URL" && test -n "$NEXT_PUBLIC_API_URL" || \
+    (echo "ERROR: NEXT_PUBLIC_APP_BASE_URL and NEXT_PUBLIC_API_URL must be set for docker build (GitLab CI/CD variables + ci/env-variables.yml build scope)." >&2 && exit 1)
+
 RUN npm run build \
     && npm cache clean --force \
     && rm -rf /tmp/* /var/tmp/* /root/.npm /root/.node-gyp

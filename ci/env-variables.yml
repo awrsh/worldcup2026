@@ -18,7 +18,3 @@ NEXT_PUBLIC_API_URL:
     - build
     - envfile
     - runtime
-
-FRONTEND_URL:
-  scope:
-    - runtime

@@ -30,26 +30,27 @@ npm install
 npm run dev
 ```
 
-URLها فقط از env خوانده می‌شوند (در کد پیش‌فرضی نیست). کپی `.env.local.example` → `.env.local` و مقادیر را پر کنید.
+URLها فقط از env خوانده می‌شوند (در کد پیش‌فرضی نیست). کپی `.env.local.example` → `.env.local`.
 
-| Env | نقش |
-|-----|-----|
-| `NEXT_PUBLIC_APP_BASE_URL` | آدرس عمومی اپ (مرورگر) |
-| `NEXT_PUBLIC_API_URL` | آدرس API پیش‌بینی‌ها |
-| `FRONTEND_URL` | همان origin برای CORS در `backend` |
+| Env | مثال (سرور CinnaGen) |
+|-----|----------------------|
+| `NEXT_PUBLIC_APP_BASE_URL` | `http://cg-gr-wk-iso-01.cinnagen.com:8080` |
+| `NEXT_PUBLIC_API_URL` | `http://cg-gr-wk-iso-01.cinnagen.com:8585` (API در **World-Cup-Bk**) |
 
-### Backend API (predictions)
+Copy `.env.local.example` → `.env.local`.
+
+### Backend API
+
+API در ریپوی جداگانه [`World-Cup-Bk`](../World-Cup-Bk) است:
 
 ```bash
-cd backend
+cd ../World-Cup-Bk
 npm install
-cp .env.example .env   # Neon DATABASE_URL + DATABASE_URL_UNPOOLED
+cp .env.example .env
 npx prisma db push
 npx prisma db seed
 npm run start:dev
 ```
-
-Copy `.env.local.example` → `.env.local` for URL overrides.
 
 ## Build & production
 
@@ -58,17 +59,17 @@ npm run build
 npm run start
 ```
 
-### Docker (دو ایمیج)
+### Docker
 
-- **Frontend:** `Dockerfile.frontend` → پورت `3000`
-- **API:** `backend/Dockerfile` → پورت `8585`
+- **Frontend (این ریپو):** `Dockerfile.frontend` — host `8080`
+- **API:** ریپوی `World-Cup-Bk` — `Dockerfile` — پورت `8585`
 
 ```bash
 sh ci/docker-build.sh
-FRONTEND_IMAGE=world-cup-frontend:latest API_IMAGE=world-cup-api:latest docker compose up -d
+FRONTEND_IMAGE=world-cup-frontend:latest docker compose up -d
 ```
 
-جزئیات CI و متغیرهای deploy: [`ci/DOCKER.md`](ci/DOCKER.md).
+جزئیات: [`ci/DOCKER.md`](ci/DOCKER.md) و `World-Cup-Bk/README.md`.
 
 ## Lint
 
